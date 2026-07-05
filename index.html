@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BreatheIn - Mental Wellness Tool</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); background-color: #3b82f6; }
+            50% { transform: scale(1.4); background-color: #10b981; }
+        }
+        .breathe-circle { animation: breathe 8s infinite ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-900 text-white flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="max-w-md w-full text-center space-y-8 bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700">
+        <h1 class="text-3xl font-bold tracking-tight text-emerald-400">BreatheIn 🌿</h1>
+        <p class="text-slate-400">Take a 1-minute break from your digital life. Protect your mental health.</p>
+
+        <!-- Breathing Animation Circle -->
+        <div class="flex justify-center py-8">
+            <div id="circle" class="w-32 h-32 rounded-full flex items-center justify-center text-xl font-bold transition-all duration-500 shadow-lg shadow-emerald-500/20">
+                <span id="text">Get Ready</span>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <button onclick="startExercise()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-bold py-3 px-6 rounded-xl transition duration-200 cursor-pointer">
+                Start 1-Min Session
+            </button>
+            <p id="timer" class="text-sm text-slate-500 hidden">Time remaining: <span class="font-mono text-white">60</span>s</p>
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 60;
+        let timerId;
+
+        function startExercise() {
+            const circle = document.getElementById('circle');
+            const text = document.getElementById('text');
+            const timer = document.getElementById('timer');
+            
+            // Animation start
+            circle.classList.add('breathe-circle');
+            timer.classList.remove('hidden');
+            
+            // Text cycle logic (4s inhale, 4s exhale)
+            let isScalingUp = true;
+            text.innerText = "Inhale...";
+            
+            const textInterval = setInterval(() => {
+                isScalingUp = !isScalingUp;
+                text.innerText = isScalingUp ? "Inhale..." : "Exhale...";
+            }, 4000);
+
+            // 60 seconds countdown
+            timerId = setInterval(() => {
+                timeLeft--;
+                document.querySelector('#timer span').innerText = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerId);
+                    clearInterval(textInterval);
+                    circle.classList.remove('breathe-circle');
+                    text.innerText = "Done! ✨";
+                    timer.innerText = "Great job! Your mind thanks you.";
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
